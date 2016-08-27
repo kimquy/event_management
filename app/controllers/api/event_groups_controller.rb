@@ -1,5 +1,5 @@
 module API
-  class GroupEventsController < ApplicationController
+  class EventGroupsController < ApplicationController
     before_action :find_event_group, except: [:index, :create]
 
     def index
@@ -11,8 +11,8 @@ module API
     end
 
     def create
-      event_group = EventGroup.new(group_event_params)
-      if group_event.save
+      event_group = EventGroup.new(event_group_params)
+      if event_group.save
         render json: event_group, status: :created
       else
         render json: event_group.errors.messages, status: :unprocessable_entity
