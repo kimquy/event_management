@@ -1,20 +1,48 @@
 module API
   class GroupEventsController < ApplicationController
-    before_action :find_group_event, except: [:index, :create]
+    before_action :find_event_group, except: [:index, :create]
 
     def index
       render json: EventGroup.all
     end
 
     def show
-      render json: @group_event
+      render json: @event_group
+    end
+
+    def create
+      event_group = EventGroup.new(group_event_params)
+      if group_event.save
+        render json: event_group, status: :created
+      else
+        render json: event_group.errors.messages, status: :unprocessable_entity
+      end
+    end
+
+    def update
+      if @event_group.update(event_group_params)
+        render json: @event_group, status: :accepted
+      else
+        render json: @event_group.errors.full_messages, status: :unprocessable_entity
+      end
+    end
+
+    def destroy
+      @event_group.destroy
+      head :ok
     end
 
     private
 
-    def find_group_event
-      @group_event ||= EventGroup.find_by_id(params[:id])
-      render :json, nothing: true, status: 404 unless @group_event
+    def event_group_params
+      params.require(:event_group).permit(
+        :name, :description, :location, :status, :start_time, :end_time
+      )
+    end
+
+    def find_event_group
+      @event_group ||= EventGroup.find_by_id(params[:id])
+      head :no_content unless @event_group
     end
   end
 end
