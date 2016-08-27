@@ -7,4 +7,9 @@ FactoryGirl.define do
     start_time Time.current
     end_time Time.current + 1.days
   end
+
+  factory :user do
+    name 'Long Nguyen'
+    email 'long.polyglot@gmail.com'
+  end
 end

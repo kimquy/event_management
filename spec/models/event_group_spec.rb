@@ -47,4 +47,21 @@ RSpec.describe EventGroup, type: :model do
       expect(event.published?).to eq(true)
     end
   end
+
+  describe 'ensure_time_duration_is_correct' do
+    let(:event) { build(:event_group) }
+
+    context 'start date > end date' do
+      before do
+        event.start_time = Date.current
+        event.end_time = Date.current - 1
+      end
+
+      it 'not be able to publish' do
+        event.publish
+
+        expect(event.persisted?).to eq(false)
+      end
+    end
+  end
 end
