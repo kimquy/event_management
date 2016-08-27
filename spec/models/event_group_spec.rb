@@ -24,4 +24,27 @@ RSpec.describe EventGroup, type: :model do
       expect(event.deleted_at).not_to eq(nil)
     end
   end
+
+  describe 'save_draft!' do
+    let(:event) { build(:event_group) }
+
+    it 'save subsets of attributes' do
+      event.save_draft!
+
+      expect(event.persisted?).to eq(true)
+      expect(event.draft?).to eq(true)
+    end
+  end
+
+  describe 'publish' do
+    let(:event) { build(:event_group) }
+
+    it 'save all attributes' do
+      event.publish
+
+      expect(event.persisted?).to eq(true)
+      expect(event.draft?).to eq(false)
+      expect(event.published?).to eq(true)
+    end
+  end
 end
